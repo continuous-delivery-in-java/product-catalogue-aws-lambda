@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    Product Catalogue Lambda Function
+
+    (based on the sample SAM Template for sam-app)
+
+Globals:
+    Function:
+        Timeout: 20
+
+
+Resources:
+
+    ProductCatalogueFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: target/ProductCatalogue-1.0.jar
+            Handler: uk.co.danielbryant.djshoppingserverless.productcatalogue.ProductCatalogueFunction::handleRequest
+            Runtime: java8
+            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+                Variables:
+                    PARAM1: VALUE
+            Events:
+                HelloWorld:
+                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                    Properties:
+                        Path: /products
+                        Method: get
+
+Outputs:
+
+    HelloWorldApi:
+      Description: "API Gateway endpoint URL for Prod stage for Product Catalogue Lambda "
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/products/"
+
+    HelloWorldFunction:
+      Description: "Product Catalogue Lambda Function ARN"
+      Value: !GetAtt ProductCatalogueFunction.Arn
+
+    HelloWorldFunctionIamRole:
+      Description: "Implicit IAM Role created for Product Catalogue Lambda function"
+      Value: !GetAtt ProductCatalogueFunction.Arn

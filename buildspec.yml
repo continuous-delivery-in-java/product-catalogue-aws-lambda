@@ -1,0 +1,12 @@
+version: 0.1
+phases:
+  install:
+    commands:
+      - mvn clean package
+      - aws cloudformation package --template-file template.yaml --s3-bucket aws-lambda-java-db
+                                   --output-template-file outputSamTemplate.yaml
+artifacts:
+  type: zip
+  files:
+    - template.yaml
+    - outputSamTemplate.yaml
